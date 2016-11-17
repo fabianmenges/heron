@@ -16,6 +16,7 @@
 #ifndef MEM_POOL_H
 #define MEM_POOL_H
 
+#include <list>
 #include <vector>
 #include <unordered_map>
 #include <typeindex>
@@ -68,7 +69,7 @@ class MemPool {
   template<typename M>
   M* acquire(M* m) {
     std::type_index type = typeid(M);
-    std::vector<B*>& pool = map_[type];
+    auto& pool = map_[type];
 
     if (pool.empty()) {
       return new M();
@@ -85,7 +86,7 @@ class MemPool {
   }
 
  private:
-  std::unordered_map<std::type_index, std::vector<B*>> map_;
+  std::unordered_map<std::type_index, std::list<B*>> map_;
 };
 
 #endif
